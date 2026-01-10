@@ -1,18 +1,46 @@
 package com.github.aguinaldoNetoDev;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class SimpleMathTest {
-    Double firstValue = 6.2D;
-    Double secondValue = 2D;
+
+    SimpleMath math;
+    Double firstValue;
+    Double secondValue;
+
+    @BeforeAll
+    static void setup() {
+        System.out.println("Before All");
+    }
+
+    @AfterAll
+    static void cleanup() {
+        System.out.println("After All");
+    }
+
+    @BeforeEach
+    void beforeEach() {
+        System.out.println("Before Each");
+         math = new SimpleMath();
+
+        firstValue = 6.2D;
+        secondValue = 2D;
+    }
+
+    @AfterEach
+    void afterEach() {
+        System.out.println("After Each");
+        math = new SimpleMath();
+    }
+
 
     @Test
     void testSum_when_sixDotTwoAddTwoDtoZero_shouldReturnEightDotTwo() {
         // GIVEN
-        SimpleMath math = new SimpleMath();
         Double expectedResult = 8.2D;
 
         // WHEN
@@ -25,7 +53,6 @@ class SimpleMathTest {
 
     @Test
     void testSubtraction_when_sixDotTwoSubtractTwoDtoZero_shouldReturnFourDotTwo() {
-        SimpleMath math = new SimpleMath();
         Double expectedResult = 4.2D;
 
         Double result = math.subtraction(firstValue, secondValue);
@@ -36,7 +63,6 @@ class SimpleMathTest {
 
     @Test
     void testMultiplication_when_sixDotTwoMultipliedTwoDtoZero_shouldReturnTwelveDotFour() {
-        SimpleMath math = new SimpleMath();
         Double expectedResult = 12.4D;
 
         Double result = math.multiplication(firstValue, secondValue);
@@ -47,7 +73,6 @@ class SimpleMathTest {
 
     @Test
     void testDivision_when_sixDotTwoDividedTwoDtoZero_shouldReturnThreeDotOne() {
-        SimpleMath math = new SimpleMath();
         Double expectedResult = 3.1D;
 
         Double result = math.division(firstValue, secondValue);
@@ -58,7 +83,6 @@ class SimpleMathTest {
 
     @Test
     void testMean_when_sixDotTwoAddTwoDtoZeroTheMean_shouldReturnFourDotOne() {
-        SimpleMath math = new SimpleMath();
         Double expectedResult = 4.1D;
 
         Double result = math.mean(firstValue, secondValue);
@@ -69,13 +93,23 @@ class SimpleMathTest {
 
     @Test
     void testSquareRoot_when_squareRootForNine_shouldReturnThree() {
-        SimpleMath math = new SimpleMath();
-        Double squareRootValue = 9D;
-        Double expectedResult = 3D;
+        Double expectedResult = 1.4142135623730951D;
 
-        Double result = math.squareRoot(squareRootValue);
+        Double result = math.squareRoot(secondValue);
 
         assertEquals(expectedResult, result,
-                () -> squareRootValue + " did not produce " + expectedResult);
+                () -> secondValue + " did not produce " + expectedResult);
+    }
+
+    @Test
+    void testDivision_when_firstNumberIsDividedByZero_shouldThrowArithmeticException() {
+
+        String expectedMessage = "Impossible to divide by zero!";
+
+        ArithmeticException result = assertThrows(ArithmeticException.class, () -> {
+                math.division(firstValue, 0D);
+        }, () -> "Division by zero should throw an ArithmeticException");
+
+        assertEquals(expectedMessage, result.getMessage(), () -> "Unexpected exception message!");
     }
 }
