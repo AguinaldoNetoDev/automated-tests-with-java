@@ -1,11 +1,14 @@
 package com.github.aguinaldoNetoDev;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
+// configurar o junit-platform no resources de test
+@Order(1)
 public class ArraysCompareTest {
 
     @Test

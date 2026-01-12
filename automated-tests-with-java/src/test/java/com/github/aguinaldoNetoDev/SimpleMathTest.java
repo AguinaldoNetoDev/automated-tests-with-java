@@ -5,7 +5,7 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
+@Order(7)
 class SimpleMathTest {
 
     SimpleMath math;
@@ -106,10 +106,9 @@ class SimpleMathTest {
 
         String expectedMessage = "Impossible to divide by zero!";
 
-        ArithmeticException result = assertThrows(ArithmeticException.class, () -> {
-                math.division(firstValue, 0D);
-        }, () -> "Division by zero should throw an ArithmeticException");
+        ArithmeticException result = assertThrows(ArithmeticException.class, () ->
+                math.division(firstValue, 0D), "Division by zero should throw an ArithmeticException");
 
-        assertEquals(expectedMessage, result.getMessage(), () -> "Unexpected exception message!");
+        assertEquals(expectedMessage, result.getMessage(), "Unexpected exception message!");
     }
 }
