@@ -1,4 +1,4 @@
-package com.github.aguinaldoNetoDev;
+package com.github.aguinaldoNetoDev.math;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

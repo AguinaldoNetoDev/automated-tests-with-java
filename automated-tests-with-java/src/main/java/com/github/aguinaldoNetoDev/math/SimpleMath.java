@@ -1,4 +1,4 @@
-package com.github.aguinaldoNetoDev;
+package com.github.aguinaldoNetoDev.math;
 
 
 public class SimpleMath {
@@ -27,6 +27,6 @@ public class SimpleMath {
     }
 
     public Double squareRoot(Double number) {
-        return (Double) Math.sqrt(number);
+        return Math.sqrt(number);
     }
 }
