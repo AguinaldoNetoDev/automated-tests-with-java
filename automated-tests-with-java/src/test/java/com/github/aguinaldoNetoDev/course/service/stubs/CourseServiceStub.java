@@ -5,7 +5,7 @@ import com.github.aguinaldoNetoDev.course.service.CourseService;
 import java.util.Arrays;
 import java.util.List;
 
-public class CourseServiceStub implements CourseService{
+public class CourseServiceStub implements CourseService {
 
     public List<String> retrieveCourses(String student) {
         return Arrays.asList(
@@ -27,6 +27,11 @@ public class CourseServiceStub implements CourseService{
     public List<String> doSomething(String student) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void deleteCourse(String course) {
+
     }
 
 }

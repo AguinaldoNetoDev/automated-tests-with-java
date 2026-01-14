@@ -4,10 +4,17 @@ import com.github.aguinaldoNetoDev.course.service.CourseService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 
 class CourseBusinessMockTest {
 
@@ -47,5 +54,83 @@ class CourseBusinessMockTest {
 
         //Then - Assert
         Assertions.assertEquals(4, filteredCourses.size());
+    }
+
+    @Test
+    void testDeleteCoursesNotRelatedToSpring_when_usingMockitoVerify_shouldCallMethodDeleteCourses() {
+        //Given - Arrange
+        Mockito.when(mockService.retrieveCourses("Aguinaldo")).thenReturn(courses);
+
+        //When - Act
+        business.deleteCoursesNotRelatedToSpring("Aguinaldo");
+
+        //Then - Assert
+        Mockito.verify(mockService, Mockito.times(1)).deleteCourse("Kotlin para DEV's Java: Aprenda a Linguagem Padrão do Android");
+        Mockito.verify(mockService, never()).deleteCourse("Microsserviços do 0 com Spring Cloud, Kotlin e Docker");
+    }
+
+    @Test
+    void testDeleteCoursesNotRelatedToSpring_when_usingMockitoVerifyV2_shouldCallMethodDeleteCourses() {
+        //Given - Arrange
+        BDDMockito.given(mockService.retrieveCourses("Aguinaldo")).willReturn(courses);
+
+        String kotlinCourse = "Kotlin para DEV's Java: Aprenda a Linguagem Padrão do Android";
+        String springCourse = "Microsserviços do 0 com Spring Cloud, Kotlin e Docker";
+
+        //When - Act
+        business.deleteCoursesNotRelatedToSpring("Aguinaldo");
+
+        //Then - Assert
+        BDDMockito.then(mockService)
+                .should(times(1))
+                .deleteCourse(kotlinCourse);
+
+        BDDMockito.then(mockService)
+                .should(never())
+                .deleteCourse(springCourse);
+    }
+
+    @Test
+    void testDeleteCoursesNotRelatedToSpring_when_capturingArguments_shouldCallMethodDeleteCourses() {
+        //Given - Arrange
+
+        courses = Arrays.asList(
+                "REST API's RESTFul do 0 à AWS com Spring Boot 3 Kotlin e Docker",
+                "Kotlin para DEV's Java: Aprenda a Linguagem Padrão do Android"
+        );
+
+        BDDMockito.given(mockService.retrieveCourses("Aguinaldo")).willReturn(courses);
+
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+
+        String kotlinCourse = "Kotlin para DEV's Java: Aprenda a Linguagem Padrão do Android";
+
+        //When - Act
+        business.deleteCoursesNotRelatedToSpring("Aguinaldo");
+
+        //Then - Assert
+        BDDMockito.then(mockService)
+                .should(times(1))
+                .deleteCourse(argumentCaptor.capture());
+
+        assertThat(argumentCaptor.getValue(), is(kotlinCourse));
+    }
+
+    @Test
+    void testDeleteCoursesNotRelatedToSpring_when_capturingAListArguments_shouldCallMethodDeleteCourses() {
+        //Given - Arrange
+        BDDMockito.given(mockService.retrieveCourses("Aguinaldo")).willReturn(courses);
+
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+
+        //When - Act
+        business.deleteCoursesNotRelatedToSpring("Aguinaldo");
+
+        //Then - Assert
+        BDDMockito.then(mockService)
+                .should(times(7))
+                .deleteCourse(argumentCaptor.capture());
+
+        assertThat(argumentCaptor.getAllValues().size(), is(7));
     }
 }
